@@ -66,7 +66,8 @@ function preload() {
 
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  //createCanvas(windowWidth, windowHeight);
+  createCanvas(1920, 1080);
   socket = io.connect("https://whitehorse.glitch.me");
     
   socket.on("audioData", (data) => {
