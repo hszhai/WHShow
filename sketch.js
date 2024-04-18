@@ -98,7 +98,7 @@ function setup() {
   
   
   for (let i = 0; i < num_dusts; i++) {
-    dusts.push(createVector(random(width), random(height)));
+    dusts.push(createVector(random(0.1,0.9)*width, random(0.1,0.8)*height));
   }
   
   flock = new Flock()
@@ -170,12 +170,15 @@ function draw() {
   }
 
 
-
-
   fill(200, 0, 0, 120);
 
+  //
+  //  moon adjustments: flying greens
+  //
   moon.update(level*100);
-  moon.near(dusts, min(level * 800, 1000));
+  //moon.near(dusts, min(level * 800, 1000));
+  //moon.near(dusts, 40 + random(20) + level * 100);
+  moon.near(dusts, 30 + random(40) + level * 200);
   moon.display(level * 150);
   ego.display();
 
@@ -212,9 +215,15 @@ function draw() {
     lastDataTime = millis(); 
   }
 
-  // stroke(255);
-  // textSize(16);  
-  // text(frameRate().toFixed(1), 10, 80)
+  if(frameCount%5==0) {
+    fill(255)
+    rect(0, 0, 100, 100);
+    fill(255, 0, 0);
+    textSize(30);  
+    text(current_time.toFixed(0), 10, 50)
+    text(frameRate().toFixed(1), 10, 80)
+  }
+
   
   klee.update(current_time)
   klee.display(micLevel*20, current_time)
@@ -248,8 +257,8 @@ function keyPressed() {
 
 function processMIDINotes(currentTime, level) {
   let nn = music.notes_at(currentTime, measureDuration);
-  let _x = random(0.24, 0.86) * width;
-  let _y = random(0.06, 0.76) * height;
+  let _x = random(0.4 - level, 0.6+level) * width;
+  let _y = random(0.06, 0.66+level) * height;
   moon.update_bar(nn, _x, _y);
   
   kpos_x = random(0.3, 0.7) * width;  // Randomize positions for visual elements

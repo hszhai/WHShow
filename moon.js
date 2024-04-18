@@ -12,7 +12,7 @@ class Moon {
     }
   }
 
-  update_bar(notes, x ,y) {
+  update_bar(notes, x, y) {
     this.x = x
     this.y = y
     
@@ -52,7 +52,11 @@ class Moon {
   }
   
   near(dusts, th) {
-    strokeWeight(0.25)
+    strokeWeight(0.5)
+    if(random()<0.4) strokeWeight(0.25)
+
+    //fill('yellow')
+    //Rect(this.x,this.y,100,100)
 
     for(let pt of this.pts) {
       if(random()<0.4) for(let dust of dusts ) {
@@ -61,7 +65,7 @@ class Moon {
         if(random()<0.4) {
           stroke('#bef264')
         }
-        if(random()<0.25 && dist(pt.x,pt.y,dust.x,dust.y)<th) {
+        if(random()<0.5 && dist(pt.x,pt.y,dust.x,dust.y)<th) {   // 0.25
           line(pt.x,pt.y,dust.x,dust.y)
         }
       }
