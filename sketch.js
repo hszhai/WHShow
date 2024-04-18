@@ -1,4 +1,5 @@
 let debug = false
+let SHOWFR = false
 
 let scene = 'A'   // 'B'
 
@@ -32,6 +33,7 @@ let measureDuration = 2727; // one m in milliseconds.
 let dusts = [];
 let num_dusts = 1000;
 let falling_points = []
+const MAX_FALLING_POINTS = 10;
 
 let flock
 
@@ -69,6 +71,17 @@ function setup() {
   //createCanvas(windowWidth, windowHeight);
   createCanvas(1920, 1080);
   socket = io.connect("https://whitehorse.glitch.me");
+
+  socket.on("touchEvent", (data) => {
+    console.log("Touch event received:", data);
+    let _x = map(data.x,0,360,0.2*width,0.8*width)   // app width is 360
+    let _y = random(0.4) * height;    // randomize y on top
+    let newPoint = new FallingPoint(_x, _y);
+    if (falling_points.length >= MAX_FALLING_POINTS) {
+      falling_points.shift();  // Remove the oldest point
+    }
+    falling_points.push(newPoint);
+  });
     
   socket.on("audioData", (data) => {
     binAmpsData = data.bin_amps;
@@ -124,7 +137,7 @@ function setup() {
 
 function draw() {
   
-  scene = 'A'
+  scene = 'A'         // 'B', for future use
   
   if(frameCount%20==0) background('#0d948811');
   // if ((frameCount % 600) < 100 && frameCount % 2 == 0){ 
@@ -183,12 +196,12 @@ function draw() {
   ego.display();
 
 
-  for (let du of dusts) {
-    stroke(200);
-    if (dist(du.x, du.y, mouseX, mouseY) < 50) {
-      line(du.x, du.y, mouseX, mouseY);
-    }
-  }
+  // for (let du of dusts) {
+  //   stroke(200);
+  //   if (dist(du.x, du.y, mouseX, mouseY) < 50) {
+  //     line(du.x, du.y, mouseX, mouseY);
+  //   }
+  // }
   
   for (let i = falling_points.length - 1; i >= 0; i--) {
     if (!falling_points[i].update()) {
@@ -215,7 +228,7 @@ function draw() {
     lastDataTime = millis(); 
   }
 
-  if(frameCount%5==0) {
+  if(SHOWFR && frameCount%5==0) {
     fill(255)
     rect(0, 0, 100, 100);
     fill(255, 0, 0);
@@ -229,13 +242,26 @@ function draw() {
   klee.display(micLevel*20, current_time)
   
   
-  if(scene==='B') {
-    if(frameCount%10===0) {
-        let newPoint = new FallingPoint(mouseX, mouseY);
-        falling_points.push(newPoint);
+  // if(scene==='B') {
+  //   if(frameCount%10===0) {
+  //       let newPoint = new FallingPoint(mouseX, mouseY);
+  //       falling_points.push(newPoint);
+  //   }
+  // }
+
+  let radius = map(micLevel, 0, 0.2, 0, 300); // Adjust max size as needed
+  stroke('#38bdf888');  
+  let _above = 400
+  ellipse(kpos_x, kpos_y - _above, 0.5+radius);
+
+  // Create or add to the flock when the mic level exceeds a threshold
+  if (micLevel > 0.05) {  
+    let newBirds = 10; // Number of birds to add
+    for (let i = 0; i < newBirds; i++) {
+      let b = new Bird(kpos_x, kpos_y - _above);
+      flock.addBird(b);
     }
   }
-
    
   if (binAmpsData.length > 0) {
     noStroke()

@@ -22,10 +22,10 @@ function draw_turn_indicator(turn) {
 
   if (turn === "left") {
     xPos = 50;
-    fill(255, 0, 0);
+    fill(200, 0, 0);
   } else if (turn === "right") {
     xPos = width - 50;
-    fill(0, 255, 0);
+    fill(0, 200, 0);
   } else {
     return;
   }
@@ -67,10 +67,13 @@ function visualizeBinAmps(binAmps, group) {
   // Visualization of binAmps with ellipses
   let lowFreq = 1,
     highFreq = 24;
+  noFill()
+  strokeWeight(1)
+  if(random()<0.1) strokeWeight(0.5)
   for (let i = 0; i < binAmps.length; i++) {
     let R = binAmps[i].amp;
     if (group === "left") {
-      fill(
+      stroke(
         R * (1 + i / highFreq) + 150 + 10,
         R + (1 + i / highFreq) * i * 0.9,
         100 - 10,
@@ -78,7 +81,7 @@ function visualizeBinAmps(binAmps, group) {
       );
     }
     if (group === "right") {
-      fill(
+      stroke(
         R * (1 + i / highFreq),
         R + (1 + i / highFreq) * i + 150,
         100,

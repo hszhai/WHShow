@@ -50,7 +50,8 @@ class Note {
       ellipse(random(-15,15),random(-15,15),random(3,8))
     }
 
-    scale(0.2 + scaleSize*sig);
+    let _s = constrain(0.2 + scaleSize*sig, 0.2, 10.0)
+    scale(_s);
     
     const octave = parseInt(this.note.slice(-1), 10);
     const noteName = this.note.slice(0, -1);

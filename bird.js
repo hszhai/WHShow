@@ -150,17 +150,21 @@ class Bird {
     if (this.alive) {
       let theta = this.velocity.heading() + radians(90);
       noFill()
-      strokeWeight(0.5)
-      stroke(200,50);
-      push();
-      translate(this.position.x, this.position.y);
-      rotate(theta);
-      beginShape();
-      vertex(0, -6);
-      vertex(-2, 6+random(5));
-      vertex(2, 6);
-      endShape(CLOSE);
-      pop();
+      strokeWeight(random(2,3))
+      //stroke(200,50);
+      stroke('#38bdf844')
+      if(random()<0.24) stroke('#7dd3fc');
+      if(random()<0.2) stroke('#a5f3fc')
+      point(this.position.x, this.position.y);
+      // push();
+      // translate(this.position.x, this.position.y);
+      // rotate(theta);
+      // beginShape();
+      // vertex(0, -6);
+      // vertex(-2, 6+random(5));
+      // vertex(2, 6);
+      // endShape(CLOSE);
+      // pop();
     }
   }
 }

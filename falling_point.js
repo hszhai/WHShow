@@ -33,7 +33,9 @@ class FallingPoint {
       return; // Skip interaction if not active
     }
 
-    stroke(255);
+    stroke('white')
+    if(random()<0.24) stroke('#7dd3fc');
+    if(random()<0.2) stroke('#a5f3fc')
     for (let du of dusts) {
       let distance = dist(this.x, this.y, du.x, du.y);
       if (distance < range) { // Interaction threshold
